@@ -23,7 +23,10 @@ DEFAULT_CONFIG = {
     "imap_port": 993,
     "email_address": "your-email@gmail.com",
     "email_password": "your-app-password",
-    "allowed_sender": "sender@example.com",
+    "allowed_senders": [
+        "sender1@example.com",
+        "sender2@example.com"
+    ],
     "poll_interval": 60,  # seconds
     "mark_as_read": True
 }
@@ -135,7 +138,11 @@ class EmailPoller:
             if not email_ids:
                 return None
 
-            allowed_sender = self.config["allowed_sender"].lower()
+            # Support both old single sender and new list format
+            allowed_senders = self.config.get("allowed_senders", [])
+            if not allowed_senders and "allowed_sender" in self.config:
+                allowed_senders = [self.config["allowed_sender"]]
+            allowed_senders = [s.lower() for s in allowed_senders]
 
             # Check each unseen email
             for email_id in reversed(email_ids):  # Most recent first
@@ -161,11 +168,15 @@ class EmailPoller:
                     if isinstance(response_part, tuple):
                         msg = email.message_from_bytes(response_part[1])
 
-                        # Check sender
+                        # Check sender against all allowed senders
                         from_header = decode_mime_header(msg["From"])
                         sender_email = get_sender_email(from_header)
 
-                        if allowed_sender in sender_email or sender_email in allowed_sender:
+                        is_allowed = any(
+                            allowed in sender_email or sender_email in allowed
+                            for allowed in allowed_senders
+                        )
+                        if is_allowed:
                             subject = decode_mime_header(msg["Subject"])
 
                             # Mark as read if configured
@@ -201,7 +212,8 @@ class EmailPoller:
     def run(self):
         """Main polling loop."""
         print(f"Starting email poller...")
-        print(f"Checking {self.config['email_address']} for emails from {self.config['allowed_sender']}")
+        allowed = self.config.get("allowed_senders", [self.config.get("allowed_sender", "unknown")])
+        print(f"Checking {self.config['email_address']} for emails from: {', '.join(allowed)}")
         print(f"Poll interval: {self.config['poll_interval']} seconds")
 
         while True:

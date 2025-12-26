@@ -1,9 +1,18 @@
 {
     "imap_server": "imap.gmail.com",
     "imap_port": 993,
-    "email_address": "your-email@gmail.com",
-    "email_password": "your-app-password",
-    "allowed_sender": "partner@example.com",
+    "email_address": "YOUR-LOVENOTES-EMAIL@gmail.com",
+    "email_password": "YOUR-APP-PASSWORD",
+    "allowed_senders": [
+        "ken10677@gmail.com",
+        "katie10677@gmail.com",
+        "info@monsterfish.llc",
+        "lawtonoliverswan@gmail.com",
+        "kmswan.dnp@gmail.com",
+        "lkswan@ufl.edu",
+        "ken@gainesvillefeargarden.com",
+        "ken@fearcraftproductions.com"
+    ],
     "poll_interval": 60,
     "mark_as_read": true
 }
