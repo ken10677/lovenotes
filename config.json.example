@@ -1,0 +1,9 @@
+{
+    "imap_server": "imap.gmail.com",
+    "imap_port": 993,
+    "email_address": "your-email@gmail.com",
+    "email_password": "your-app-password",
+    "allowed_sender": "partner@example.com",
+    "poll_interval": 60,
+    "mark_as_read": true
+}

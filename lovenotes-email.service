@@ -1,0 +1,15 @@
+[Unit]
+Description=Love Notes Email Poller
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/lovenotes
+ExecStart=/usr/bin/python3 /home/pi/lovenotes/email_poller.py
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+[Unit]
+Description=Love Notes Display
+After=graphical.target
+Wants=graphical.target
+
+[Service]
+Type=simple
+User=pi
+Environment=DISPLAY=:0
+Environment=SDL_VIDEODRIVER=kmsdrm
+WorkingDirectory=/home/pi/lovenotes
+ExecStartPre=/bin/sleep 5
+ExecStart=/usr/bin/python3 /home/pi/lovenotes/display.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target
